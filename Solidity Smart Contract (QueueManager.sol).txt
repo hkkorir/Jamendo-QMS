@@ -1,0 +1,24 @@
+pragma solidity ^0.8.0;
+
+contract QueueManager {
+    uint256 public queueNumber;
+    uint256 public nextTicketNumber;
+
+    event TicketIssued(uint256 ticketNumber);
+
+    constructor() {
+        queueNumber = 0;
+        nextTicketNumber = 1;
+    }
+
+    function issueTicket() public returns (uint256) {
+        uint256 ticketNumber = nextTicketNumber;
+        nextTicketNumber++;
+        emit TicketIssued(ticketNumber);
+        return ticketNumber;
+    }
+
+    function getNextTicketNumber() public view returns (uint256) {
+        return nextTicketNumber;
+    }
+}
