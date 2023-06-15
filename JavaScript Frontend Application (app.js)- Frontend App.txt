@@ -1,0 +1,47 @@
+const Web3 = require('web3');
+const contractABI = require('./QueueManagerABI.json');
+
+const web3 = new Web3('http://localhost:8545'); // Connect to your local Ethereum network or any Ethereum network
+
+const contractAddress = '0x123456789...'; // Replace with your deployed contract address
+const queueManagerContract = new web3.eth.Contract(contractABI, contractAddress);
+
+// Enqueue a customer
+async function enqueueCustomer() {
+    const accounts = await web3.eth.getAccounts();
+    const sender = accounts[0];
+
+    await queueManagerContract.methods.enqueue().send({ from: sender });
+
+    console.log('New customer added to the queue');
+}
+
+// Dequeue the next customer
+async function dequeueNextCustomer() {
+    const accounts = await web3.eth.getAccounts();
+    const sender = accounts[0];
+
+    await queueManagerContract.methods.dequeue().send({ from: sender });
+
+    console.log('Next customer dequeued');
+}
+
+// Get the number of customers in the queue
+async function getQueueLength() {
+    const length = await queueManagerContract.methods.getQueueLength().call();
+
+    console.log(`Number of customers in the queue: ${length}`);
+}
+
+// Get the address of the next customer in the queue
+async function getNextCustomer() {
+    const nextCustomer = await queueManagerContract.methods.getNextCustomer().call();
+
+    console.log(`Next customer in the queue: ${nextCustomer}`);
+}
+
+// Example usage
+enqueueCustomer();
+dequeueNextCustomer();
+getQueueLength();
+getNextCustomer();

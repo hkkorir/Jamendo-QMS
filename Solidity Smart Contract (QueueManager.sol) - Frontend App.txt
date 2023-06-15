@@ -1,0 +1,30 @@
+pragma solidity ^0.8.0;
+
+contract QueueManager {
+    uint256 private queueNumber;
+    address[] private queue;
+
+    event NewCustomer(address indexed customer);
+
+    function getQueueLength() public view returns (uint256) {
+        return queue.length;
+    }
+
+    function enqueue() public {
+        queue.push(msg.sender);
+        emit NewCustomer(msg.sender);
+    }
+
+    function dequeue() public {
+        require(queue.length > 0, "Queue is empty");
+        require(queue[0] == msg.sender, "You are not the next customer");
+        
+        delete queue[0];
+        queueNumber++;
+    }
+
+    function getNextCustomer() public view returns (address) {
+        require(queue.length > 0, "Queue is empty");
+        return queue[0];
+    }
+}
